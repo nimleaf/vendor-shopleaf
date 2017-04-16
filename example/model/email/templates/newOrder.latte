@@ -1,0 +1,111 @@
+{extends '@layout.latte'}
+
+{block head}
+<title>Přijatá objednávka</title>
+{/block}
+
+{block body}
+{? $sumPiece = 0}
+
+<h2>Děkujeme za objednávku,</h2>
+<p>Obdrželi jsme Vaši objednávku číslo {$order->id} podanou přes internetovou stránku <a href="{$pageSettings->url}" target="_blank">{$pageSettings->name}</a></p>
+
+<h3>objednané zboží</h3>
+<table style="width:500px;">
+	<thead>
+		<tr>
+			<th style="padding: 5px 10px;"></th>
+			<th style="padding: 5px 10px; width:100%;">název</th>
+			<th style="padding: 5px 10px; white-space:nowrap; text-align: right;">počet kusů</th>
+			<th style="padding: 5px 10px; white-space:nowrap; text-align: right;">cena za kus</th>
+			<th style="padding: 5px 10px; white-space:nowrap; text-align: right;">cena celkem</th>
+		</tr>
+	</thead>
+	{foreach $order->productSold as $productSold}
+		<tr>
+			<td style="padding: 5px 10px;">
+				<img src="{$pageSettings->url}{$productSold->product->getImageUrl('mini')}">
+			</td>
+			<td style="padding: 5px 10px;">
+				{$productSold->product->name}<br>
+				kód: {$productSold->product->code}
+			</td>
+			<td style="padding: 5px 10px; text-align: right;">
+				{$productSold->piece}
+			</td>
+			<td style="padding: 5px 10px; text-align: right;">
+				{$productSold->price} Kč
+			</td>
+			<td style="padding: 5px 10px; text-align: right;">
+				{$productSold->piece * $productSold->price} Kč
+			</td>
+		</tr>
+	{/foreach}
+	{foreach $order->voucherSold as $voucherSold}
+		<tr>
+			<td style="padding: 5px 10px;">
+
+			</td>
+			<td style="padding: 5px 10px;">
+				{$voucherSold->getVoucher()->name}<br>
+				kód: {$voucherSold->getVoucher()->code}
+			</td>
+			<td style="padding: 5px 10px;">
+			</td>
+			<td style="padding: 5px 10px;">
+			</td>
+			<td style="padding: 5px 10px; text-align: right;">
+				{$voucherSold->getVoucher()->getTranslatedDiscount()}
+			</td>
+		</tr>
+	{/foreach}
+	<tr>
+		<td></td>
+		<td style="padding: 5px 10px;">{$order->shippingName}</td>
+		<td></td>
+		<td></td>
+		<td style="padding: 5px 10px; text-align: right;">{$order->shippingPrice} Kč</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td style="padding: 5px 10px;">{$order->paymentName}</td>
+		<td></td>
+		<td></td>
+		<td style="padding: 5px 10px; text-align: right;">{$order->paymentPrice} Kč</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td style="padding: 5px 10px;"><strong>souhrn</strong></td>
+		<td style="padding: 5px 10px; text-align: right;">
+			<strong>{$sumPiece = $order->getFinalPiece()} {if $sumPiece == 1}kus{else}kusů{/if}</strong>
+		</td>
+		<td></td>
+		<td style="padding: 5px 10px; text-align: right;">
+			<strong>{$order->getFinalPrice()} Kč</strong>
+		</td>
+	</tr>
+</table>
+
+<table style="width:500px;">
+	<tr>
+		<td align="left" valign="top" style="width: 240px;">
+			<h3>kontaktní informace</h3>
+			{$order->contact->email}
+			<br>
+			{$order->contact->phone}
+		</td>
+		<td width="20px;"></td>
+		<td align="left" valign="top" style="width: 240px;">
+			<h3>doručovací adresa</h3>
+			{$order->deliveryAddress->name} {$order->deliveryAddress->surname}
+			<br>
+			{$order->deliveryAddress->street}
+			<br>
+			{$order->deliveryAddress->zip} {$order->deliveryAddress->town}
+		</td>
+	</tr>
+</table>
+
+<p>Daňový doklad obdržíte e-mailem, který Vám zašleme po doručení zboží dopravcem na Vaši adresu.</p>	
+<br>
+<p>Pokud o této objednávce nic nevíte, dejte nám to vědět.</p>		

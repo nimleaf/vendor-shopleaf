@@ -1,0 +1,58 @@
+{block content-header}
+<a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createBanner">{_"Přidat baner"}</a>
+
+{/block}
+{block content}
+
+<!-- Modal create banner -->
+<div class="modal fade" id="createBanner" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"Nový baner"}</h4>
+				<div class="modal-body">
+					{control createForm}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<table n:class="table">
+	<thead>
+		<tr>
+			<th n:class="w100">{_"název"}</th>
+			<th>{_"náhled"}</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $banners as $banner}
+		{? $isMain = $pageSettings->mainBanner == $banner}
+		<tr>
+			<td n:class="$isMain ? b">{$banner->title}</td>
+			<td><img src="{$banner->getPath()}" n:class="img-responsive, img-banner-preview, $isMain ? img-banner-preview-main" /></td>
+			<td n:class="tools, $isMain ? b">
+				{if $isMain}
+					<a n:href="unsetMainBanner!">
+					{_"zrušit výchozí pozici"}
+					</a>
+				{else}
+					<a n:href="setAsMainBanner! $banner->id">
+						{_"nastavit jako výchozí"}
+					</a>
+				{/if}
+			</td>
+			<td n:class="tools"> 
+				<a n:href="edit $banner->id"><i class="fa fa-pencil fa-fw"></i>&nbsp;{_"upravit"}</a>			
+				{if $banner->canBeDeleted($em)}
+					<a n:href="delete! $banner->id" n:class="confirm-delete"><i class="fa fa-close fa-fw"></i>&nbsp;{_"smazat"}</a>
+				{else}
+					<a n:class="disabled" title="{_"Tento baner nelze smazat, protože je nastaven jako výchozí."}"><i class="fa fa-close fa-fw"></i> {_"nelze smazat"}</a>
+				{/if}
+			</td>
+		</tr>
+
+	{/foreach}
+</table>

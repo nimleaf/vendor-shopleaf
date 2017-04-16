@@ -1,0 +1,81 @@
+{? $sortBlock = '../components/sort.latte'}
+
+{block content}
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				{include $sortBlock, name => 'id', column => 'id'}
+			</th>
+			<th></th>
+			<th>{_"zákazník"}</th>
+			<th>{_"objednávka"}</th>
+			<th>
+				{include $sortBlock, name => 'status', column => 'status'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'datum', column => 'dateCreated'}
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $orders as $order}
+		<tr>
+			<td>
+				{$order->id|truncate:10}
+			</td>
+			<td>
+				{ifset $order->comment}
+					<a data-toggle="modal" data-target="#comment{$order->id}">
+						<i n:class="fa, fa-commenting, fa-fw"></i>
+					</a>
+					<div n:class="modal, fade" id="comment{$order->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div n:class="modal-dialog">
+							<div n:class="modal-content">
+								<div n:class="modal-header">
+									<button type="button" n:class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 n:class="modal-title" id="myModalLabel">
+										{_"Komentář zákazníka"}
+									</h4>
+								</div>
+								<div n:class="modal-body">
+									{$order->comment}
+								</div>
+							</div>
+						</div>
+					</div>
+				{/ifset}
+			</td>
+			<td>
+				{$order->deliveryAddress->name} {$order->deliveryAddress->surname}<br>
+				{$order->deliveryAddress->street}<br>
+				{$order->deliveryAddress->zip} {$order->deliveryAddress->town}
+			</td>
+			<td>
+				{foreach $order->getProductSold() as $productSold}
+					{$productSold->getProduct()->name}<br>
+				{/foreach}
+				<strong>{$order->getFinalPrice()} {_"Kč"}</strong>
+			</td>
+			<td n:class="nw">
+				<strong>{$order->getTranslatedStatus()}</strong><br>
+				{? $trackingCodeCompleteUrl = $order->getTrackingCodeCompleteUrl()}
+				{if $trackingCodeCompleteUrl != NULL}
+					<a href="{$trackingCodeCompleteUrl}" target="_blank">{$order->shippingTrackingCode}</a>
+				{else}
+					{$order->shippingTrackingCode}
+				{/if}
+				<br>
+			</td>
+			<td>
+				{$order->dateCreated|myDateTime}
+			</td>
+			<td n:class="tools">
+				<a n:href="view $order->id" class="nw"><i n:class="fa, fa-desktop, fa-fw"></i> {_"zobrazit"}</a>
+				<a n:href="delete! $order->id" class="confirm-delete nw"><i n:class="fa, fa-close, fa-fw"></i> {_"smazat"}</a>
+			</td>
+		</tr>
+	{/foreach}
+</table>

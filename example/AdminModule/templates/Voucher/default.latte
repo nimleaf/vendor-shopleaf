@@ -1,0 +1,50 @@
+{? $sortBlock = '../components/sort.latte'}
+{block content-header}
+<a n:href="Voucher:create" class="btn btn-primary btn-lg">{_"Přidat kupón"}</a>
+{/block}
+{block content}
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				{include $sortBlock, name => 'název', column => 'name'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'kód', column => 'code'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'platnost od', column => 'dateFrom'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'platnost do', column => 'dateTo'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'sleva', column => 'discount'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'poštovné zdarma', column => 'freeShipping'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'minimální cena objednávky', column => 'minimalPrice'}
+			</th>
+			<th>{_"počet použití"}</th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $vouchers as $voucher}
+		<tr>
+			<td>{$voucher}</td>
+			<td>{$voucher->code}</td>
+			<td>{$voucher->dateFrom|myDate}</td>
+			<td>{$voucher->dateTo|myDate}</td>
+			<td class="nw">{$voucher->getTranslatedDiscount()}</td>
+			<td>{$voucher->freeShipping}</td>
+			<td class="nw">{$voucher->minimalPrice} {_"Kč"}</td>
+			<td>{$voucher->getTranslatedUsage()}</td>
+			<td n:class="tools">
+				<a n:href="edit $voucher->id" class="nw"><i class="fa fa-pencil fa-fw"></i> {_"upravit"}</a>
+				<a n:href="delete! $voucher->id" class="nw"><i class="fa fa-close fa-fw"></i> {_"smazat"}</a>
+			</td>
+		</tr>
+	{/foreach}
+</table>

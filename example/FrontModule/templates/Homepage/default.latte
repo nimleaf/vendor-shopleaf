@@ -1,0 +1,86 @@
+{block content}
+{if $pageSettings->mainBanner}
+	<div class="col-md-12 callout">
+		<img 
+			src="{$pageSettings->mainBanner->getPath()}" 
+			class="img-callout img-responsive" 
+			title="{$pageSettings->mainBanner->title}" 
+			alt="{$pageSettings->mainBanner->title}"
+			>
+	</div>
+{/if}
+
+<div class="col-md-12">
+	<div class="homepage-widget">
+		{control widget, 'position'=>'homepage'}
+	</div>
+</div>
+
+<div class="col-md-12">
+	<div class="row">
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/naramky.jpg" class="img-responsive">
+				<span>Náramky</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/klicenky.jpg" class="img-responsive">
+				<span>Klíčenky</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/paracord.jpg" class="img-responsive">
+				<span>Paracord</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/prsteny.jpg" class="img-responsive">
+				<span>Prsteny</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/privesky.jpg" class="img-responsive">
+				<span>Přívěsky</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/prislusenstvi.jpg" class="img-responsive">
+				<span>Příslušenství</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/nausnice.jpg" class="img-responsive">
+				<span>Náušnice</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+		<div class="hpcat col-md-3">
+			<a href="#">
+				<img src="{$basePath}/images/hpcat/mobily.jpg" class="img-responsive">
+				<span>Pro mobily</span>
+			</a>
+			<div class="fc"></div>
+		</div>
+	</div>
+</div>
+
+<div class="fc fc20"></div>
+
+<h1>nejnovější</h1>
+
+{foreach $products as $product}
+	{include '../components/productList.latte', 'product' => $product}
+{/foreach}

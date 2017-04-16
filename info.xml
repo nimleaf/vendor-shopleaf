@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <icon>
+        http://nimleaf.cz/project-vendor/shopleaf-mini.png
+    </icon>
+    <name>
+        Nette Leaf shopleaf
+    </name>
+    <ver>
+        1.0.0
+    </ver>
+    <update>
+        16.04.2017
+    </update>
+    <authors>
+        <author>
+            <name>
+                Iveta Hudcová
+            </name>
+            <contact>
+                mail@nimleaf.cz
+            </contact>
+            <website>
+                http://www.nimleaf.cz
+            </website>
+        </author>
+    </authors>
+</root>

@@ -1,0 +1,37 @@
+{
+    "name": "nimleaf/shopleaf",
+    "description": "Shopleaf",
+    "type": "library",
+    "version": "1.0.0",
+    "license": ["GPL-2.0"],
+    "authors": [
+        {
+            "name": "Iveta Hudcová",
+            "email": "mail@nimleaf.cz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "nimleaf/sandbox": "dev-master",
+        "nimleaf/editorial": "dev-master",
+        "nimleaf/invoice": "dev-master"
+    },
+    "require-dev": {
+        "nette/tester": "~1.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        },
+        "exclude-from-classmap": [
+            "/example/"
+        ]
+    },
+    "repositories": [
+        {
+            "packagist": false,
+            "type": "vcs",
+            "url": "https://github.com/nimleaf/vendor-shopleaf.git"
+        }
+    ]
+}

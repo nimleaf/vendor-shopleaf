@@ -1,0 +1,110 @@
+{? $sortBlock = '../components/sort.latte'}
+{block content-header}
+<a n:href="Product:create" n:class="btn, btn-primary, btn-lg">{_"Přidat produkt"}</a>
+{/block}
+{block content}
+<table n:class="table">
+	<thead>
+		<tr class="nw">
+			<th>
+				{include $sortBlock, name => 'kód', column => 'code'}
+			</th>
+			<th></th>
+			<th>{_"foto"}</th>
+			<th n:class="w100">
+				{include $sortBlock, name => 'název', column => 'name'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'aktivní', column => 'active'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'skladem', column => 'cachePiece'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'cena', column => 'price'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'akční cena', column => 'actionPrice'}
+			</th>
+			<th>
+				{include $sortBlock, name => 'kategorie', column => 'category'}
+			</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $products as $product}
+		<tr>
+			<td>
+				{$product->code}
+				<p n:class="info-icons">
+					{ifset $product->note}
+						<a data-toggle="modal" data-target="#note{$product->id}">
+							<i n:class="fa, fa-pencil, fa-fw"></i>
+						</a>
+					<div n:class="modal, fade" id="note{$product->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div n:class="modal-dialog">
+							<div n:class="modal-content">
+								<div n:class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<h4 n:class="modal-title" id="myModalLabel">{_"Poznámka"}</h4>
+								</div>
+								<div n:class="modal-body">
+									{$product->note}
+								</div>
+							</div>
+						</div>
+					</div>
+				{/ifset}
+				</p>
+			</td>
+			<td>
+				{if $product->getAukro()->auctionId}
+					<img src="{$basePath}/icon/external/aukro.png"/>
+				{/if}
+			</td>
+			<td>
+				<img src="{$product->getImageUrl('mini')}">
+			</td>	
+			<td n:class="w100">
+				{$product->name}
+				<p n:class="sm">{!$product->description|striptags|truncate:100}</p>
+			</td>
+			<td>
+				<i n:class="fa, $product->active ? fa-check : fa-close"></i>
+				{if !$product->active}
+					<a n:href="active! $product->id">aktivovat</a>
+				{/if}
+			</td>
+			<td>{$product->getPieces()}</td>
+			<td>{$product->price},-</td>
+			<td>{ifset $product->actionPrice}{$product->actionPrice},-{/ifset}</td>
+			<td>{$product->category}</td>
+			<td>
+				{foreach $product->tags as $tag}
+					{$tag}
+				{/foreach}
+			</td>
+			<td n:class="tools">
+				{if !$iterator->first}
+					<a n:href="up! $product->id">
+						<i n:class="fa, fa-arrow-circle-o-up"></i>&nbsp;{_"nahoru"}
+					</a>
+				{/if}
+				{if !$iterator->last}
+					<a n:href="down! $product->id">
+						<i n:class="fa, fa-arrow-circle-o-down"></i>&nbsp;{_"dolů"}
+					</a>
+				{/if}
+			</td>
+			<td n:class="tools">
+				<a n:href="edit $product->id"><i n:class="fa, fa-pencil, fa-fw"></i>&nbsp;{_"upravit"}</a>
+				<a n:href="delete! $product->id" n:class="confirm-delete"><i n:class="fa, fa-close, fa-fw"></i>&nbsp;{_"smazat"}</a>
+			</td>
+		</tr>
+	{/foreach}
+</table>
+

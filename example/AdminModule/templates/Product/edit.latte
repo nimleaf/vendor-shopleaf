@@ -1,0 +1,103 @@
+{block content}
+
+<div class="row">
+	<div class="col-md-6">
+		{control editForm}
+	</div>
+	<div class="col-md-6">
+		<img src="{$product->getImageUrl('thumb')}" class="img-responsive img-thumbnail" />
+		<h2>Aukro</h2>
+		{if $product->getAukro()->auctionId}
+			Prezentováno 
+			<a href="{$product->getAukro()->getAuctionPreviewUrl()}" target="_blank">
+				{$product->getAukro()->auctionId}
+			</a>
+		{else}
+			<a n:href="aukroCheckAdd! $product->id" class="btn btn-primary btn-sm">{_"spočítat poplatky"}</a>
+		{/if}
+
+		<h2>tagy</h2>
+		{foreach $product->tags as $tag}
+			{$tag}
+		{/foreach}
+
+		<h2>pohyby</h2>
+		<h3>nákupy</h3>
+		<div>
+			<a n:href="purchaseCreate $product->id" class="btn btn-primary btn-sm">{_"přidat nákup"}</a>
+		</div>
+
+		<table n:class="table">
+			<thead>
+				<tr>
+					<th>{_"datum"}</th>
+					<th>{_"počet kusů"}</th>
+					<th>{_"cena za kus"}</th>
+					<th></th>
+				</tr>
+			</thead>
+			{foreach $product->purchase as $purchase}
+				<tr>
+					<td>{$purchase->dateCreated|myDateTime}</td>
+					<td>{$purchase->piece}</td>
+					<td>{$purchase->price}</td>
+					<td>
+						<a n:href="purchaseEdit $product->id, $purchase->id" class="nw"><i class="fa fa-pencil fa-fw"></i>&nbsp;{_"upravit"}</a>
+						<a n:href="purchaseDelete! $purchase->id" n:class="confirm-delete, nw"><i class="fa fa-close fa-fw"></i>&nbsp;{_"smazat"}</a>
+					</td>
+				</tr>
+			{/foreach}
+		</table>
+
+		<h3>prodeje</h3>
+		<table n:class="table">
+			<thead>
+				<tr>
+					<th>{_"datum"}</th>
+					<th>{_"počet kusů"}</th>
+					<th>{_"cena za kus"}</th>
+					<th>{_"objednávka"}</th>
+				</tr>
+			</thead>
+			{foreach $product->getOrders($em) as $order}
+				{? $productSold = $order->getProductSoldById($product->id)}
+
+				<tr>
+					<td>{$order->dateCreated|myDateTime}</td>
+					<td>{$productSold->piece}</td>
+					<td>{$productSold->price}</td>
+					<td>
+						<a n:href="Order:view $order->id">{$order->id}</a>
+					</td>
+				</tr>
+			{/foreach}
+		</table>
+
+		<h3>korekce</h3>
+		<div>
+			<a n:href="correctionCreate $product->id" class="btn btn-primary btn-sm">{_"přidat korekci"}</a>
+		</div>
+
+		<table n:class="table">
+			<thead>
+				<tr>
+					<th>{_"datum"}</th>
+					<th>{_"počet kusů"}</th>
+					<th>{_"poznámka"}</th>
+					<th></th>
+				</tr>
+			</thead>
+			{foreach $product->correction as $correction}
+				<tr>
+					<td>{$correction->dateCreated|myDateTime}</td>
+					<td>{$correction->piece}</td>
+					<td>{$correction->note}</td>
+					<td>
+						<a n:href="correctionEdit $product->id, $correction->id" class="nw"><i class="fa fa-pencil fa-fw"></i>&nbsp;{_"upravit"}</a>
+						<a n:href="correctionDelete! $correction->id" n:class="confirm-delete, nw"><i class="fa fa-close fa-fw"></i>&nbsp;{_"smazat"}</a>
+					</td>
+				</tr>
+			{/foreach}
+		</table>
+	</div>
+</div>

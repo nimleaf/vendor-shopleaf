@@ -1,0 +1,32 @@
+{extends '@layout.latte'}
+
+{block head}
+<title>Pokyny k platbě</title>
+{/block}
+
+{block body}
+{? $sumPiece = 0}
+
+<h2>Pokyny k platbě</h2>
+<p>Obdrželi jsme Vaši objednávku číslo {$order->id} podanou přes internetovou stránku <a href="{$pageSettings->url}" target="_blank">{$pageSettings->name}</a></p>
+<p>Níže Vám posíláme pokyny k platbě:</p>
+<p>&nbsp;</p>
+<p>bankovní účet: {$pageSettings->bankAccount}</p>
+<p>částka: {$order->getFinalPrice()} Kč</p>
+<p>variabilní symbol: {$order->id}</p>
+<p>&nbsp;</p>
+<p>
+	V příloze naleznete fakturu, včetně platebního QR kódu. 
+	Ten Vám při platbě z mobilní bankovní aplikace ušetří spoustu práce :)
+</p>
+
+<p>
+	<strong>Platba QR kódem: </strong>
+	Tento kód načtete pomocí svého chytrého
+	telefonu, na kterém máte nainstalovanou bankovní aplikaci své banky
+	a platební příkaz v aplikaci se automaticky vyplní správnými údaji.
+	Sami vůbec nemusíte platební údaje vypisovat. Pouze je
+	zkontrolujete, případně doplníte, a odešlete standardním způsobem
+	do banky ke zpracování. Ryhlé, pohodlné, jednoduché.
+</p>
+

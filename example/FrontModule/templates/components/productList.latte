@@ -1,0 +1,19 @@
+<div class="product col-md-3">
+	<a n:href="Product:view $product->id">
+		<img src="{$product->getImageUrl('thumb')}" class="product-image img-thumbnail"/>
+	</a>
+
+	<div class="product-name">
+		<a n:href="Product:view $product->id">
+			{$product->name}
+		</a>
+	</div>
+		
+	<div class="fc"></div>
+	<span class="price">{_"cena:"} <strong>{$product->getFinalPrice()} {_"Kč"}</strong></span>
+	<div class="fc"></div>
+
+	<a class="btn btn-cart btn-block" n:href="Basket:add $product->id">
+		<i class="fa fa-shopping-cart"></i> {_"Do košíku"}
+	</a>
+</div>

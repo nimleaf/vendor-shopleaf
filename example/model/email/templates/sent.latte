@@ -1,0 +1,20 @@
+{extends '@layout.latte'}
+
+{block head}
+<title>Objednávka byla odeslána</title>
+{/block}
+
+{block body}
+
+<h2>Objednávka byla odeslána</h2>
+<p>Vaše zboží jsme právě předali dopravci a je na cestě k Vám. Doufáme, že se Vám bude líbit.</p>
+{? $trackingCodeCompleteUrl = $order->getTrackingCodeCompleteUrl()}
+{if $trackingCodeCompleteUrl != NULL}
+	<p>
+		Svou zásilku můžete sledovat na následujícím odkazu: 
+		<a href="{$trackingCodeCompleteUrl}" target="_blank">{$order->shippingTrackingCode}</a>
+	</p>
+{/if}
+<p>Daňový doklad obdržíte e-mailem, který Vám zašleme po doručení zboží dopravcem na Vaši adresu.</p>
+
+

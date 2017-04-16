@@ -1,0 +1,73 @@
+{block content}
+<div class="row">
+	<div class="col-md-6">
+		{control editForm}
+	</div>
+	<div class="col-md-6 test-connect">
+		<h2>
+			{_"Test spojení"}
+		</h2>
+		{if $connect == TRUE}
+			<div class="success">
+				<p><i class="fa fa-check"></i> {_"Připojeno"}</p>
+			</div>
+			
+			<h3>{$userData['user-first-name']} {$userData['user-last-name']}</h3>
+			<table class="table">
+				<tr>
+					<td>
+						ID uživatele: 
+					</td>
+					<td>
+						{$userData['user-id']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Stav účtu: 
+					</td>
+					<td>
+						{$myBilling}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						rating: 
+					</td>
+					<td>
+						{$userData['user-rating']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						email: 
+					</td>
+					<td>
+						{$userData['user-email']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						telefon: 
+					</td>
+					<td>
+						{$userData['user-phone']}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						adresa: 
+					</td>
+					<td>
+						{$userData['user-address']}, {$userData['user-postcode']} {$userData['user-city']}
+					</td>
+				</tr>
+			</table>
+		{else}
+			<div class="warning">
+				<p><i class="fa fa-close"></i> {_"Spojení nebylo navázáno"}</p>
+				<span>{$message}</span>
+			</div>
+		{/if}
+	</div>
+</div>

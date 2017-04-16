@@ -1,0 +1,288 @@
+{block content-header}
+<a n:href="invoice!" target="_blank" type="button" class="btn btn-primary btn-lg">{_"generovat fakturu"}</a>
+
+<!-- Modal status -->
+<div class="modal fade" id="status" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"změna statusu"} {$order->getTranslatedStatus()}</h4>
+			</div>
+			<div class="modal-body">
+				{control statusForm}
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal shipping tracking code -->
+<div class="modal fade" id="shippingTrackingCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"změna sledovacího kódu"}</h4>
+			</div>
+			<div class="modal-body">
+				{control shippingTrackingCodeForm}
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Modal add product -->
+<div class="modal fade" id="add-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 n:class="modal-title" id="myModalLabel">{_"přidat zboží"}</h4>
+			</div>
+			<div n:class="modal-body">
+				{if $formStep == 2}
+					<div>
+						<div class="row">
+							<div class="col-sm-9">
+								<img src="{$formStepProductSoldProduct->getImageUrl('mini')}" class="fl mr20 thumbnail">
+								<strong>{$formStepProductSoldProduct->name}</strong><br>
+								{_"Skladem:"} {$formStepProductSoldProduct->getPieces()}
+							</div>
+							<div class="col-sm-3">
+								<a n:href="Product:edit $formStepProductSoldProduct->id" target="_blank" type="button" class="btn btn-default btn-sm btn-block mb10">{_"upravit produkt"}</a>
+								<a n:href=":Front:Product:view $formStepProductSoldProduct->id" target="_blank" type="button" class="btn btn-default btn-sm btn-block">{_"zobrazit produkt"}</a>
+							</div>
+						</div>
+					</div>
+					<div class="fc fc20"></div>
+				{/if}
+				{control orderProductSoldAddForm}
+			</div>
+		</div>
+	</div>
+</div>
+			
+<!-- Modal add voucher -->
+<div class="modal fade" id="add-voucher" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"přidat kupón"}</h4>
+			</div>
+			<div class="modal-body">
+				{control orderVoucherSoldAddForm}
+			</div>
+		</div>
+	</div>
+</div>
+
+{if $formStep == 2}
+	<script type="text/javascript">
+		$('#add-product').modal({
+			keyboard: false
+		});
+	</script>
+{/if}
+
+{foreach $order->getProductSold() as $productSold}
+	<!-- Modal edit product sold -->
+	<div class="modal fade" id="edit-product-sold-{$productSold->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 n:class="modal-title" id="myModalLabel">{_"upravit zboží"}</h4>
+				</div>
+				<div n:class="modal-body">
+					{control productSoldEditForm-$productSold->id}
+				</div>
+			</div>
+		</div>
+	</div>
+{/foreach}
+{/block}
+
+{block content}
+{? $sumPiece = 0}
+
+<div class="row">
+	<div class="col-md-6">
+		<h3>{_"parametry objednávky"}</h3>
+		<table n:class="table">
+			<tr>
+				<td class="nw mr20">{_"id"}</td>
+				<td></td>
+				<td class="w100">{$order->id}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"datum objednání"}</td>
+				<td></td>
+				<td class="w100">{$order->dateCreated|myDateTime}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"IP adresa"}</td>
+				<td></td>
+				<td class="w100">{$order->ip}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"komentář zákazníka"}</td>
+				<td></td>
+				<td class="w100">{$order->comment}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"aktuální status"}</td>
+				<td><a href="" data-toggle="modal" data-target="#status"><i class="fa fa-pencil"></i></a></td>
+				<td class="w100">{$order->getTranslatedStatus()}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"dopravní společnost"}</td>
+				<td></td>
+				<td class="w100">{$order->shippingName}<td>
+			</tr>
+			<tr>
+				<td class="nw mr20">{_"sledovací kód"}</td>
+				<td><a href="" data-toggle="modal" data-target="#shippingTrackingCode"><i class="fa fa-pencil"></i></a></td>
+				<td class="w100">
+					{? $trackingCodeCompleteUrl = $order->getTrackingCodeCompleteUrl()}
+					{if $trackingCodeCompleteUrl != NULL}
+						<a href="{$trackingCodeCompleteUrl}" target="_blank">{$order->shippingTrackingCode}</a>
+					{else}
+						{$order->shippingTrackingCode}
+					{/if}
+				<td>
+			</tr>
+		</table>
+	</div>
+	<div class="col-md-6">
+
+		<h3>{_"kontaktní informace"}</h3>
+		<ul class="list-unstyled">
+			<li>
+				{$order->contact->email}
+			</li>
+			<li>
+				{$order->contact->phone}
+			</li>
+		</ul>
+
+		<h3>{_"doručovací adresa"}</h3>
+		<ul class="list-unstyled">
+			<li>
+				{$order->deliveryAddress->name} {$order->deliveryAddress->surname}
+			</li>
+			<li>
+				{$order->deliveryAddress->street}
+			</li>
+			<li>
+				{$order->deliveryAddress->zip} {$order->deliveryAddress->town}
+			</li>
+		</ul>
+	</div>
+</div>
+
+<h3>{_"objednané zboží"}</h3>
+<a data-toggle="modal" data-target="#add-product" class="btn btn-primary">{_"přidat zboží"}</a>
+<a data-toggle="modal" data-target="#add-voucher" class="btn btn-primary">{_"přidat kupón"}</a>
+<table n:class="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th class="w100">{_"název"}</th>
+			<th class="nw">{_"kód"}</th>
+			<th class="nw tar">{_"počet kusů"}</th>
+			<th class="nw tar">{_"cena za kus"}</th>
+			<th class="nw tar">{_"cena celkem"}</th>
+			<th class="nw">{_"nástroje"}</th>
+		</tr>
+	</thead>
+	{foreach $order->productSold as $productSold}
+		<tr>
+			<td>
+				<img src="{$productSold->product->getImageUrl('mini')}" class="thumbnail">
+			</td>
+			<td>
+				{$productSold->product->name}<br>
+				<a n:href="Product:edit $productSold->product->id" target="_blank" type="button" class="btn btn-default btn-sm">{_"upravit produkt"}</a>
+				<a n:href=":Front:Product:view $productSold->product->id" target="_blank" type="button" class="btn btn-default btn-sm">{_"zobrazit produkt"}</a>
+			</td>
+			<td>
+				{$productSold->product->code}
+			</td>
+			<td class="tar">
+				{$productSold->piece}
+			</td>
+			<td class="tar">
+				{$productSold->price} {_"Kč"}
+			</td>
+			<td class="tar">
+				{$productSold->piece * $productSold->price} {_"Kč"}
+			</td>
+			<td>
+				<a href="" data-toggle="modal" data-target="#edit-product-sold-{$productSold->id}" class="nw"><i class="fa fa-edit fa-fw"></i> {_"upravit"}</a>
+				<a n:href="deleteProductSold! $order->id, $productSold->id" class="nw"><i class="fa fa-close fa-fw"></i> {_"smazat"}</a>
+			</td>
+		</tr>
+	{/foreach}
+	{foreach $order->getVoucherSold() as $voucherSold}
+		<tr>
+			<td></td>
+			<td>
+				{$voucherSold->voucher->name}<br>
+				<a n:href="Voucher:edit $voucherSold->voucher->id" target="_blank" type="button" class="btn btn-default btn-sm">{_"upravit voucher"}</a>
+			</td>
+			<td>
+				{$voucherSold->voucher->code}
+			</td>
+			<td></td>
+			<td></td>
+			<td class="tar">
+				{$voucherSold->voucher->getTranslatedDiscount()}
+			</td>
+			<td>
+				<a n:href="deleteVoucherSold! $order->id, $voucherSold->id" class="nw"><i class="fa fa-close fa-fw"></i> {_"smazat"}</a>
+			</td>
+		</tr>
+	{/foreach}
+	<tr>
+		<td></td>
+		<td>{$order->shippingName}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td class="tar">{$order->shippingPrice} {_"Kč"}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{$order->paymentName}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td class="tar">{$order->paymentPrice} {_"Kč"}</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>{_"souhrn"}</td>
+		<td></td>
+		<td class="tar">{$sumPiece = $order->getFinalPiece()} {if $sumPiece == 1}{_"kus"}{else}{_"kusů"}{/if}</td>
+		<td></td>
+		<td class="tar">{$order->getFinalPrice()} {_"Kč"}</td>
+	</tr>
+</table>
+
+<h3>{_"historie statusů"}</h3>
+<table n:class="table">
+	<thead>
+		<tr>
+			<th>{_"datum"}</th>
+			<th>{_"status"}</th>
+		</tr>
+	</thead>
+	{foreach $order->statusHistory as $statusHistory}
+		<tr>
+			<td>{$statusHistory->dateCreated|myDateTime}</td>
+			<td>{$statusHistory}<td>
+		</tr>
+	{/foreach}
+</table>

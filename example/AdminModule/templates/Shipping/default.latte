@@ -1,0 +1,44 @@
+{block content-header}
+<a n:href="create" class="btn btn-primary btn-lg">{_"Přidat způsob dopravy"}</a>
+{/block}
+{block content}
+<table n:class="table">
+	<thead>
+		<tr>
+			<th></th>
+			<th n:class="w100">{_"název"}</th>
+			<th>{_"cena"}</th>
+			<th n:class="nw">{_"povolené možnosti platby"}</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $shippings as $shipping}
+		<tr>
+			<td><img src="{$basePath . $shipping->getIcon()}" /></td>
+			<td>{$shipping->name}</td>
+			<td>{$shipping->price}</td>
+			<td>{implode(', ',$shipping->getPaymentOptionArray())}</td>
+			<td class="tools">
+				{if !$iterator->first}
+					<a n:href="up! $shipping->id" class="nw">
+						<i class="fa fa-arrow-circle-o-up"></i>&nbsp;{_"nahoru"}
+					</a>
+				{/if}
+				{if !$iterator->last}
+					<a n:href="down! $shipping->id" class="nw">
+						<i class="fa fa-arrow-circle-o-down"></i>&nbsp;{_"dolů"}
+					</a>
+				{/if}
+			</td>
+			<td class="tools">
+				<a n:href="edit $shipping->id" class="nw">
+					<i class="fa fa-pencil fa-fw"></i>&nbsp;{_"upravit"}
+				</a>
+				<a n:href="delete! $shipping->id" class="confirm-delete nw">
+					<i class="fa fa-close fa-fw"></i>&nbsp;{_"smazat"}
+				</a>
+			</td>
+		</tr>
+	{/foreach}
+</table>

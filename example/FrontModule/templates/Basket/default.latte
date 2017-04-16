@@ -1,0 +1,113 @@
+{block content}
+<!-- Modal status -->
+<div class="modal fade" id="add-voucher" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"Vložit kupón"}</h4>
+			</div>
+			<div class="modal-body">
+				{control voucherAddForm}
+			</div>
+		</div>
+	</div>
+</div>
+
+<h1>{_"nákupní košík"}</h1>
+<div class="row">
+	<div class="col-md-8">
+		<table class="table table-condensed product-summary">
+			<tr>
+				<th></th>
+				<th>
+					{_"Zboží"}
+				</th>
+				<th>
+					{_"Počet kusů"}
+				</th>
+				<th>
+					{_"Cena za kus"}
+				</th>
+				<th class="sum">
+					{_"Cena celkem"}
+				</th>
+				<th></th>
+			</tr>
+			{foreach $products as $item}
+				{? $product = $item['product']}
+				<tr>
+					<td>
+						<img src="{$product->getImageUrl('mini')}" class="img-thumbnail fl mr20">
+					</td>
+					<td class="name">
+						<a n:href="Product:view $product->id">
+							{$product->name}
+						</a>
+						<p class="sm">
+							{_"Skladem"} {$product->getPieces()}
+						</p>
+					</td>
+					<td>
+						{$item['piece']}
+						<p>
+							<a n:href="add $product->id"><i class="fa fa-plus-square"></i></a>
+							<a n:href="add $product->id, -1"><i class="fa fa-minus-square"></i></a>
+						</p>
+					</td>
+					<td>
+						{$price = $product->price} {_"Kč"}
+					</td>
+					<td class="sum">
+						{$price * $item['piece']} {_"Kč"}
+					</td>
+					<td>
+						<a n:href="delete! $product->id" class="sum-close"><i class="fa fa-close"></i></a>
+					</td>
+				</tr>
+			{/foreach}
+
+			{foreach $vouchers as $voucher}
+				<tr>
+					<td>
+						<img src="{$basePath}/icon/app/voucher.png" class="img-thumbnail fl mr20">
+					</td>
+					<td class="name">
+						{$voucher}
+					</td>
+					<td></td>
+					<td></td>
+					<td class="sum">
+						{$voucher->getTranslatedDiscount()}
+					</td>
+					<td>
+						<a n:href="deleteVoucher! 'voucherId' => $voucher->id" class="sum-close"><i class="fa fa-close"></i></a>
+					</td>
+				</tr>
+			{/foreach}
+
+			<tr class="summary-row">
+				<td></td>
+				<td class="name">
+					{_"Souhrn"}
+				</td>
+				<td>
+					{$sumPiece}
+				</td>
+				<td></td>
+				<td class="sum">
+					{$sumPrice} {_"Kč"}
+				</td>
+				<td></td>
+			</tr>
+		</table>
+
+		<div class="fc fc20"></div>
+		<a data-toggle="modal" data-target="#add-voucher" class="btn btn-primary">{_"vložit kupón"}</a>
+	</div>
+</div>
+
+<div class="fc fc40"></div>
+
+<h2>{_"doprava a platba"}</h2>
+{control orderForm}

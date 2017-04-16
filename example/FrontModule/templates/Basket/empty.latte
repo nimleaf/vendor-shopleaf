@@ -1,0 +1,11 @@
+{block content}
+<div class="basket">
+	<h1>{_"Obsah košíku"}</h1>
+	
+	<div class="empty-basket">
+		<i class="fa fa-shopping-cart"></i>
+		<br>
+		<span>{_"Váš košík je prázdný"}</span>
+	</div>
+    {control widget, 'position' => 'basketEmpty'}
+</div>

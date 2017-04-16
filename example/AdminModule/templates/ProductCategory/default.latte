@@ -1,0 +1,40 @@
+{block content-header}
+<a n:href="create" class="btn btn-primary btn-lg">{_"přidat kategorii"}</a>
+{/block}
+{block content}
+<table n:class="table">
+	<thead>
+		<tr>
+			<th n:class="w100">{_"název"}</th>
+			<th>{_"produktů"}</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $categories as $category}
+		<tr>
+			<td>{$category->name}</td>
+			<td>{count($category->getProducts($em))}</td>
+			<td n:class="tools">
+				{if !$iterator->first}
+					<a n:href="up! $category->id">
+						<i class="fa fa-arrow-circle-o-up"></i> {_"nahoru"}
+					</a>
+				{/if}
+				{if !$iterator->last}
+					<a n:href="down! $category->id">
+						<i class="fa fa-arrow-circle-o-down"></i> {_"dolů"}
+					</a>
+				{/if}
+			</td>
+			<td n:class="tools">
+				<a n:href="edit $category->id"><i class="fa fa-pencil fa-fw"></i> {_"upravit"}</a>			
+				{if $category->canBeDeleted($em)}
+					<a n:href="delete! $category->id" n:class="confirm-delete"><i class="fa fa-close fa-fw"></i> {_"smazat"}</a>
+				{else}
+					<a n:class="disabled" title="{_"K této kategorii jsou přiřazeny produkty."}"><i class="fa fa-close fa-fw"></i> {_"nelze smazat"}</a>
+				{/if}
+			</td>
+		</tr>
+	{/foreach}
+</table>

@@ -1,0 +1,29 @@
+<body style="background-color: graytext">
+	<table>
+		<tr>
+			{foreach $products as $product}
+				<td style="
+					margin: 5px;
+					max-width: 100%;
+					padding: 4px; 
+					border: 1px solid gray; 
+					border-radius: 4px;
+					">
+					<span>ID: <strong>{$product->id}</strong>, skladem: {$product->cachePiece}</span>
+					<br/>
+					<img src="{$product->getImageUrl('normal')}" style="
+						 max-width: 150px;
+						 height: 150px;
+						 border: 1px solid gray; 
+						 border-radius: 4px;
+						 "/>
+				</td>
+				{if $iterator->getCounter() % 4}
+					{else}
+				</tr>
+				<tr>
+				{/if}
+			{/foreach}
+		</tr>
+	</table>
+</body>

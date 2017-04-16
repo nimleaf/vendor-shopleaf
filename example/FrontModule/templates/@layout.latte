@@ -1,0 +1,103 @@
+{extends '@baseLayout.latte'}
+{block bodyContent}
+<script> document.documentElement.className += ' js'</script>
+<div class="layout">
+	{if $user->isLoggedIn() && $user->isInRole('admin')}
+		<nav class="navbar admin-menu" role="navigation">
+			<div class="container-fluid">
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a n:href=":Admin:Dashboard:">{_"administrace"}</a>
+					</li>
+					<li>
+						<a n:href="Log:out">{_"odhlásit se"}</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	{/if}
+
+	<div class="container bottom-border">
+		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{$flash->message}
+		</div>
+	</div>
+
+	<section id="header">
+		<div class="container side-border no-padding">
+			<div class="header">
+				<div class="col-md-4"></div>
+				<div class="col-md-4 tac">
+					<a n:href="Homepage:" title="{$pageSettings->name}">
+						<img src="{$basePath}/images/logo.png" />
+					</a>
+				</div>
+				<div class="col-md-4 tac">
+				</div>
+				<div class="col-md-12 tac">
+					<div class="row pastel-promo">
+						<div class="col-md-3 promo promo-1">
+							<a n:href="Homepage:" title="{$pageSettings->name}">
+								vše skladem
+							</a>
+						</div>
+						<div class="col-md-3 promo promo-2">
+							<span>
+								poštovné jen 55 Kč
+							</span>
+						</div>
+						<div class="col-md-3 promo promo-3">
+							<span>
+								odeslání do druhého dne
+							</span>
+						</div>
+						<div class="col-md-3 promo promo-4">
+							{control basket}
+							{*
+							<a href="https://www.facebook.com/nimkouzelnesperky/" target="_blank">
+								soutěže na facebooku
+							</a>
+							*}
+						</div>
+					</div>
+				</div>
+				<div class="fc"></div>
+			</div>
+		</div>
+	</section>
+
+	<section id="content">
+		<div class="container side-border bottom-border main-content">
+			<div class="row">
+				<div class="col-md-3">
+					{control productMenu}
+				</div>
+				<div class="col-md-9">
+					{include content}
+				</div>
+			</div>
+			<div class="fc fc40"></div>
+		</div>
+	</section>
+
+	<section id="footer">
+		<div class="container">
+			<div class="col-md-12">
+				<div class="col-md-4 widget">
+					{control widget, 'position'=>'footerLeft'}
+				</div>
+				<div class="col-md-4 widget">
+					{control widget, 'position'=>'footerCenter'}
+				</div>
+				<div class="col-md-4 widget">
+					{control widget, 'position'=>'footerRight'}
+				</div>
+			</div>
+			<div class="fc fc20"></div>
+			<p class="sm tar">
+				{$application['name']} {$application['version']} | Desing & code: <a href="http://www.nimleaf.cz" target="_blank">Nimleaf.cz</a>
+			</p>
+		</div>
+	</section>
+</div><!-- /layout -->

@@ -1,0 +1,34 @@
+<div class="navbar-header">
+	<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+		<i class="fa fa-bars"></i>
+	</button>
+</div>
+
+{? $maxCount = 7}
+
+<nav class="collapse navbar-collapse" id="bs-navbar">
+	<ul class="nav navbar-nav">
+		{foreach $items as $item}
+			{if $iterator->counter == $maxCount}
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						Více <span class="caret"></span>
+					</a>
+
+					<ul class="dropdown-menu">
+					{/if}
+					<li>
+						<a 
+							href="{plink ProductCategory: $item->id}"
+							n:class="$currentCategoryId == $item->id ? active"
+							>
+							{$item->name}
+						</a>
+					</li>
+					{if $iterator->last && $iterator->counter >= $maxCount}
+					</ul>
+				</li>
+			{/if}
+		{/foreach}
+	</ul>
+</nav>

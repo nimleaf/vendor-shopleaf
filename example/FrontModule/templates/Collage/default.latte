@@ -1,0 +1,10 @@
+{block bodyContent}
+{foreach $products as $product}
+	<div class="img-thumbnail">
+		<span>{_"ID"}: <strong>{$product->id}</strong>, {_"skladem"}: {$product->cachePiece}</span>
+		<br/>
+		<a n:href="Product:view $product->id">
+		<img src="{$product->getImageUrl('thumb')}" class="product-image img-thumbnail"/>
+		</a>
+	</div>
+{/foreach}

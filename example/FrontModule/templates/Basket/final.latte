@@ -1,0 +1,125 @@
+{block content}
+{? $sumPiece = 0}
+<div class="order-summary">
+	<h1>{_"Objednávka byla odeslána. Děkujeme."}</h1>
+	<h2>{_"Souhrn objednávky číslo"} {$order->id}:</h2>
+
+	<div class="row">
+		<div class="col-md-4">
+			<h3>{_"doručovací adresa"}</h3>
+			<ul class="list-unstyled">
+				<li>
+					{$order->deliveryAddress->name} {$order->deliveryAddress->surname}
+				</li>
+				<li>
+					{$order->deliveryAddress->street}
+				</li>
+				<li>
+					{$order->deliveryAddress->zip} {$order->deliveryAddress->town}
+				</li>
+			</ul>
+			<h3>{_"kontaktní informace"}</h3>
+			<ul class="list-unstyled">
+				<li>
+					{$order->contact->email}
+				</li>
+				<li>
+					{$order->contact->phone}
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-md-8">
+			<h3>{_"objednané zboží"}</h3>
+			<table class="table table-condensed product-summary">
+				<tr>
+					<th></th>
+					<th>
+						{_"Zboží"}
+					</th>
+					<th>
+						{_"Počet kusů"}
+					</th>
+					<th>
+						{_"Cena za kus"}
+					</th>
+					<th class="sum">
+						{_"Cena celkem"}
+					</th>
+				</tr>
+				{foreach $order->productSold as $productSold}
+					{? $product = $productSold->product}
+					<tr>
+						<td>
+							<img src="{$product->getImageUrl('mini')}" class="img-thumbnail fl mr20">
+						</td>
+						<td class="name">
+							<a n:href="Product:view $product->id">
+								{$product->name}
+							</a>
+						</td>
+						<td>
+							{$productSold->piece}
+						</td>
+						<td>
+							{$price = $productSold->price} {_"Kč"}
+						</td>
+						<td class="sum">
+							{$price * $productSold->piece} {_"Kč"}
+						</td>
+					</tr>
+				{/foreach}
+
+				{foreach $order->voucherSold as $voucherSold}
+					{? $voucher = $voucherSold->voucher}
+					<tr>
+						<td>
+							<img src="{$basePath}/icon/app/voucher.png" class="img-thumbnail fl mr20">
+						</td>
+						<td class="name">
+							{$voucher}
+						</td>
+						<td></td>
+						<td></td>
+						<td class="sum">
+							{$voucher->getTranslatedDiscount()}
+						</td>
+					</tr>
+				{/foreach}
+				
+				<tr>
+					<td>
+						<img src="{$order->shipping->getIcon()}" class="img-thumbnail fl mr20">
+					</td>
+					<td class="name">
+						{$order->shippingName}
+						<br>
+						{$order->paymentName}
+					</td>
+					<td></td>
+					<td></td>
+					<td class="sum">
+						{$order->shippingPrice} {_"Kč"}
+						<br>
+						{$order->paymentPrice} {_"Kč"}
+					</td>
+				</tr>
+				
+				<tr class="summary-row">
+					<td></td>
+					<td class="name">
+						{_"Souhrn"}
+					</td>
+					<td>
+						{$order->getFinalPiece()}
+					</td>
+					<td></td>
+					<td class="sum">
+						{$order->getFinalPrice()} {_"Kč"}
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	{control widget, 'position'=>'basketFinal'}
+</div>

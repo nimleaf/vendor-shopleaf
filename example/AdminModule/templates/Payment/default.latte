@@ -1,0 +1,42 @@
+{block content-header}
+<a n:href="create" class="btn btn-primary btn-lg">{_"Přidat možnost platby"}</a>
+{/block}
+{block content}
+<table n:class="table">
+	<thead>
+		<tr>
+			<th n:class="w100">{_"název"}</th>
+			<th>{_"typ platby"}</th>
+			<th>{_"cena"}</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	{foreach $payments as $payment}
+		<tr>
+			<td>{$payment->name}</td>
+			<td>{$payment->getTranslatedPaymentType()}</td>
+			<td>{$payment->price}</td>
+			<td n:class="tools">
+				{if !$iterator->first}
+					<a n:href="up! $payment->id">
+						<i class="fa fa-arrow-circle-o-up"></i> {_"nahoru"}
+					</a>
+				{/if}
+				{if !$iterator->last}
+					<a n:href="down! $payment->id">
+						<i class="fa fa-arrow-circle-o-down"></i> {_"dolů"}
+					</a>
+				{/if}
+			</td>
+			<td n:class="tools">
+				<a n:href="edit $payment->id"><i class="fa fa-pencil fa-fw"></i> {_"upravit"}</a>
+				{if $payment->canBeDeleted($em)}
+					<a n:href="delete! $payment->id" n:class="confirm-delete"><i class="fa fa-close fa-fw"></i> {_"smazat"}</a>
+				{else}
+					<a n:class="disabled" title="{_"Tuto platbu využívá některá z možností poštovného."}"><i class="fa fa-close fa-fw"></i> {_"nelze smazat"}</a>
+				{/if}
+			</td>
+		</tr>
+	{/foreach}
+</table>

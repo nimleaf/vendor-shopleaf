@@ -1,0 +1,120 @@
+{block content}
+{? $productPrice = 0}
+{? $productPiece = 0}
+{ifset $orderSession->source}{? $sourceId = $orderSession->source}{/ifset}
+{? $source = $orderManager->source->find($sourceId)}
+<div class="mb20">
+    <h1>{_"Detail objednávky"}</h1>
+    <p n:if="$source">{_"Source"}: {if $source->icon}<img src="{$baseUri}/img/source/{$source->icon}.png">{else}{$source->title}{/if}</p>
+    <h2>{_"Adresa"}</h2>
+    {if $orderSession->address}
+        <ul>
+            <li>{$orderSession->address['name']} {$orderSession->address['surname']}</li>
+            <li>{$orderSession->address['street']}</li>
+            <li>{$orderSession->address['zip']} {$orderSession->address['town']}</li>
+        </ul>
+        <button type="button" class="btn btn-sm btn-primary btn-lg" data-toggle="modal" data-target="#address">{_"Upravit adresu"}</button>
+    {else}
+        <button type="button" class="btn btn-sm btn-primary btn-lg" data-toggle="modal" data-target="#address">{_"Přidat adresu"}</button>
+    {/if}
+    <h2>{_"Kontakt"}</h2>
+    {if $orderSession->contact}
+        <ul>
+            <li>{$orderSession->contact['email']}</li>
+            <li>{$orderSession->contact['phone']}</li>
+        </ul>
+        <button type="button" class="btn btn-sm btn-primary btn-lg" data-toggle="modal" data-target="#contact">{_"Upravit kontakt"}</button>
+    {else}
+        <button type="button" class="btn btn-sm btn-primary btn-lg" data-toggle="modal" data-target="#contact">{_"Přidat kontakt"}</button>
+    {/if}
+    <h2>{_"Produkt"}</h2>
+    <table class="table table-condensed">
+        <tr>
+            <th>{_"ID"}</th>
+            <th>{_"Název"}</th>
+            <th>{_"Počet kusů"}</th>
+            <th>{_"Cena za kus"}</th>
+            <th></th>
+        </tr>
+        {if $orderSession->product}
+            <tr n:foreach="$orderSession->product as $orderProduct">
+                <td>{$orderProduct['id']}</td>
+                <td><a n:href=":Front:Product:show $orderProduct['id']">{$productManager->find($orderProduct['id'])->title}</a></td>
+                <td>{$orderProduct['piece']}</td>
+                <td>{if $orderProduct['price']}{$orderProduct['price']}{else}{$productManager->getPrice($orderProduct['id'])}{/if}</td>
+                <td>
+                    <a n:href="deleteProduct! $orderProduct['id']"><i class="fa fa-remove"></i></a>
+                </td>
+                {? $productPrice += $orderProduct['piece'] * $orderProduct['price']}
+                {? $productPiece += $orderProduct['piece']}
+            </tr>
+        {/if}
+        <tr>
+        <tr>
+            <td></td>
+            <td>{$orderSession->shipping}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>{$orderSession->payment}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+            <td></td>
+            <td><button type="button" class="btn btn-sm btn-primary btn-lg" data-toggle="modal" data-target="#product">{_"Přidat produkt"}</button></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <a n:href="saveOrder!" class="btn btn-success btn-lg">{_"Uložit"}</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="address" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"Adresa"}</h4>
+            </div>
+            <div class="modal-body">
+                {control addressForm}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="contact" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"Kontakt"}</h4>
+            </div>
+            <div class="modal-body">
+                {control contactForm}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{_"Produkt"}</h4>
+            </div>
+            <div class="modal-body">
+                {control productForm}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+<style>
+	body {
+		font-family: 'OpenSans', sans-serif;
+	}
+	.w100 {
+		width:100%;
+	}
+	.w50 {
+		width:50%;
+	}
+	.tar {
+		text-align: right;
+	}
+	.tac {
+		text-align: center;
+	}
+	.vat {
+		vertical-align: top;
+	}
+	.title {
+		font-weight: bold;
+	}
+	.sm {
+		font-size: 80%;
+	}
+	.sm70 {
+		font-size: 70%;
+	}
+	.nw {
+		white-space: nowrap;
+	}
+</style>
+
+<table n:class="w100">
+	<tr>
+		<td n:class="w50">faktura č. {$order->id}</td>
+		<td n:class="w50, tar">datum vystavení {$order->dateCreated|date:'j. n. Y'}</td>
+	</tr>
+</table>
+<hr>
+
+<table n:class="w100">
+	<tr>
+		<td n:class="w50, vat">
+			<p n:class="title, sm">dodavatel</p>
+			<p>{$pageSettings->contractor|nl2br|noescape}</p>
+			{if $pageSettings->ic}
+				<p>IČ: {$pageSettings->ic}</p>
+			{/if}
+			{if $pageSettings->dic}
+				<p>DIČ: {$pageSettings->dic}</p>>
+			{/if}
+			<p n:class="sm"><br>{$pageSettings->contractorNote|nl2br|noescape}</p>
+		</td>
+		<td n:class="w50, vat">
+			<p n:class="title, sm">odběratel</p>
+			{$order->deliveryAddress->name} {$order->deliveryAddress->surname}<br>
+			{$order->deliveryAddress->street}<br>
+			{$order->deliveryAddress->zip} {$order->deliveryAddress->town}
+		</td>
+	</tr>
+</table>
+<hr>
+
+<table n:class="w100">
+	<tr>
+		<td width="80" n:class="title, sm, nw">
+			kód zboží
+		</td>
+		<td n:class="title, sm">
+			název
+		</td>
+		<td width="60" n:class="title, sm, nw, tac">
+			počet kusů
+		</td>
+		<td width="60" n:class="title, sm, nw, tar">
+			cena za kus
+		</td>
+		<td width="60" n:class="title, sm, nw, tar">
+			cena celkem
+		</td>
+	</tr>
+	{foreach $order->productSold as $productSold}
+		<tr>
+			<td>
+				{$productSold->product->code}
+			</td>
+			<td>
+				{$productSold->product->name}
+			</td>
+			<td n:class="tac">
+				{$productSold->piece}
+			</td>
+			<td n:class="tar">
+				{$productSold->price} Kč
+			</td>
+			<td n:class="tar">
+				{$productSold->piece * $productSold->price} Kč
+			</td>
+		</tr>
+	{/foreach}
+	{foreach $order->voucherSold as $voucherSold}
+		<tr>
+			<td>
+				{$voucherSold->voucher->code}
+			</td>
+			<td>
+				{$voucherSold->voucher->name}
+			</td>
+			<td n:class="tac">
+			</td>
+			<td n:class="tar">
+			</td>
+			<td n:class="tar">
+				{$voucherSold->voucher->getTranslatedDiscount()}
+			</td>
+		</tr>
+	{/foreach}
+	<tr>
+		<td></td>
+		<td>
+			{$order->shippingName}
+		</td>
+		<td></td>
+		<td></td>
+		<td n:class="tar">
+			{$order->shippingPrice} Kč
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			{$order->paymentName}
+		</td>
+		<td></td>
+		<td></td>
+		<td n:class="tar">
+			{$order->paymentPrice} Kč
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td n:class="title">
+			shrnutí objednávky
+		</td>
+		<td n:class="title, tac">
+			{$order->getFinalPiece()}
+		</td>
+		<td></td>
+		<td n:class="title, tar">
+			{$order->getFinalPrice()} Kč
+		</td>
+	</tr>
+</table>
+<hr>
+
+<table n:class="w100">
+	<tr>
+		<td n:class="title, sm">
+			platba
+		</td>
+	</tr>
+	<tr>
+		<td n:class="w50, vat">
+			<table>
+				<tr>
+					<td>
+						způsob platby:
+					</td>
+					<td>
+						{$order->paymentName}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						číslo účtu:
+					</td>
+					<td>
+						{$pageSettings->bankAccount}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						variabilní symbol:
+					</td>
+					<td>
+						{$order->id}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						datum splatnosti:
+					</td>
+					<td>
+						{$order->dateCreated|date:'j. n. Y'}
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td n:class="w50, vat">
+			{if $pageSettings->iban}
+				<table>
+					<tr>
+						<td n:class="vat">
+					<barcode code="{$order->generatePaymentQrCode($em)}" type="QR" size="1" error="M" class="barcode">
+						<br><br>
+						<p n:class="sm70, vat">
+							<strong>Platba QR kódem</strong>
+							Tento kód načtete pomocí svého chytrého telefonu, na kterém máte nainstalovanou bankovní aplikaci své banky a platební příkaz v aplikaci se automaticky vyplní správnými údaji. Sami vůbec nemusíte platební údaje vypisovat. Pouze je zkontrolujete, případně doplníte, a odešlete standardním způsobem do banky ke zpracování. Ryhlé, pohodlné, jednoduché.
+						</p>
+						</td>
+						</tr>
+				</table>
+			{/if}
+		</td>
+	</tr>
+</table>
+<hr>
+
+
+
+
+
