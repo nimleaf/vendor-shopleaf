@@ -68,3 +68,7 @@ Propojení s Heureka
 
 <h3>Nastavení</h3>
 Počet produktů na stránku
+
+<h2>Verze</h2>
+<h3>1.0.1</h3>
+Oprava chyby v modelu

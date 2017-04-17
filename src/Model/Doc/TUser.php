@@ -13,13 +13,13 @@ trait TUser {
 	use Editorial\TUser;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Contact", cascade={"persist, remove"})
+	 * @ORM\OneToOne(targetEntity="Contact", cascade={"persist", "remove"})
 	 * @var Contact kontaktní údaje
 	 */
 	protected $contact;
 
 	/**
-	 * @ORM\OneToOne(targetEntity="Address", cascade={"persist, remove"})
+	 * @ORM\OneToOne(targetEntity="Address", cascade={"persist", "remove"})
 	 * @var Address adresa
 	 */
 	protected $address;
