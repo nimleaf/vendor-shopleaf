@@ -26,3 +26,23 @@
         </author>
     </authors>
 </root>
+
+<update>
+    <sql ver="1.1.0">
+        CREATE TABLE product_media (product_id INT NOT NULL, media_id INT NOT NULL, INDEX IDX_CB70DA504584665A (product_id), INDEX IDX_CB70DA50EA9FDD75 (media_id), PRIMARY KEY(product_id, media_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+        ALTER TABLE product_media ADD CONSTRAINT FK_CB70DA504584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE;
+        ALTER TABLE product_media ADD CONSTRAINT FK_CB70DA50EA9FDD75 FOREIGN KEY (media_id) REFERENCES media (id) ON DELETE CASCADE;
+        ALTER TABLE product DROP FOREIGN KEY FK_D34A04ADD44F05E5;
+        DROP INDEX IDX_D34A04ADD44F05E5 ON product;
+        ALTER TABLE product DROP images_id;
+        ALTER TABLE product ADD main_image_id INT DEFAULT NULL;
+        ALTER TABLE product ADD CONSTRAINT FK_D34A04ADE4873418 FOREIGN KEY (main_image_id) REFERENCES media (id);
+        CREATE INDEX IDX_D34A04ADE4873418 ON product (main_image_id);
+		
+		ALTER TABLE product DROP FOREIGN KEY FK_D34A04ADE4873418;
+		DROP INDEX IDX_D34A04ADE4873418 ON product;
+		ALTER TABLE product CHANGE main_image_id images_id INT DEFAULT NULL;
+		ALTER TABLE product ADD CONSTRAINT FK_D34A04ADD44F05E5 FOREIGN KEY (images_id) REFERENCES media (id);
+		CREATE INDEX IDX_D34A04ADD44F05E5 ON product (images_id);
+    </sql>
+</update>

@@ -27,6 +27,8 @@ Přidávání, editace a mazání produktů
 Jedna hlavní fotografie
 <br>
 Kategorie a tagy
+<br>
+Uživatel, který vložil produkt
 <h4>Sklad</h4>
 Nákupní cena při naskladnění
 <br>
@@ -72,3 +74,8 @@ Počet produktů na stránku
 <h2>Verze</h2>
 <h3>1.0.1</h3>
 Oprava chyby v modelu
+
+<h3>1.1.0</h3>
+Uživatel, který vložil nebo upravil produkt
+<br>
+Více fotografií k produktu

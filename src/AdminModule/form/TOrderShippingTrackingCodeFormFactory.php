@@ -5,7 +5,7 @@ namespace Nimleaf\Shopleaf\AdminModule\Form;
 use App\Model\Doc\Order;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Form;
-use Nimleaf\String;
+use Nimleaf\Strings;
 
 trait TOrderShippingTrackingCodeFormFactory {
 	
@@ -19,7 +19,7 @@ trait TOrderShippingTrackingCodeFormFactory {
 	
 
 	protected function applyValues(Order $order, $values) {
-		$order->shippingTrackingCode = String::emptyToNull($values->shippingTrackingCode);
+		$order->shippingTrackingCode = Strings::emptyToNull($values->shippingTrackingCode);
 		$order->save($this->em);
 	}
 

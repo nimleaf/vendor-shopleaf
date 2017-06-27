@@ -5,7 +5,7 @@ namespace Nimleaf\Shopleaf\Model\Doc;
 trait TProductCorrection {
 
 	/**
-	 * @ORM\manyToOne(targetEntity="Product")
+	 * @ORM\ManyToOne(targetEntity="Product")
 	 * @var Product
 	 */
 	public $product;

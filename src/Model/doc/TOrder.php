@@ -168,23 +168,9 @@ trait TOrder {
 	 * @return string
 	 */
 	public function generatePaymentQrCode(EntityManager $em) {
-		$settings = Settings::getSettings($em);
-		if (!$settings->iban) {
-			//nenastaven IBAN
-			return;
-		}
-
-		$code = [
-			'spd' => 'SPD',
-			'version' => '1.0',
-			'acc' => 'ACC:' . $settings->iban,
-			'am' => 'AM:' . $this->getFinalPrice(),
-			'cc' => 'CC:CZK', //todo do settings
-			'msg' => 'MSG:' . $this->deliveryAddress->name . ' ' . $this->deliveryAddress->surname,
-			'x-vs' => 'X-VS:' . $this->code,
-		];
-
-		return implode('*', $code);
+		$settingsInvoice = Settings::getSettings($em)->invoice;
+		$msg = $this->deliveryAddress->name . ' ' . $this->deliveryAddress->surname;
+		return $settingsInvoice->generatePaymentQrCode($this->getFinalPrice(), $this->code, $msg);
 	}
 
 	public function getContact() {
