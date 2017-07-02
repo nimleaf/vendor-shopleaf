@@ -14,7 +14,7 @@ use App\Model\Doc\VoucherExeption;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Utils\Html;
-use Nimleaf\String;
+use Nimleaf\Strings;
 
 trait TOrderFormFactory {
 
@@ -148,7 +148,7 @@ trait TOrderFormFactory {
 	}
 
 	public function formSucceeded(Form $form, $values) {
-		$comment = String::emptyToNull($values->comment);
+		$comment = Strings::emptyToNull($values->comment);
 		$contact = $this->setContact($values);
 		$deliveryAddress = $this->setDeliveryAddress($values);
 

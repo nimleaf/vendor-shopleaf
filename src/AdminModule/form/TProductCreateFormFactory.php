@@ -8,9 +8,8 @@ use App\Model\Doc\ProductCategory;
 use App\Model\Doc\ProductTag;
 use App\Model\Doc\User;
 use Doctrine\ORM\EntityManager;
-use Nimleaf\String;
+use Nimleaf\Strings;
 use Nette\Application\UI\Form;
-use Nette\Utils\Image;
 
 trait TProductCreateFormFactory {
 
@@ -29,8 +28,8 @@ trait TProductCreateFormFactory {
 		$product->name = $values->name;
 		$product->description = $values->description;
 		$product->price = $values->price;
-		$product->actionPrice = String::emptyToNull($values->actionPrice);
-		$product->note = String::emptyToNull($values->note);
+		$product->actionPrice = Strings::emptyToNull($values->actionPrice);
+		$product->note = Strings::emptyToNull($values->note);
 		$product->active = $values->active;
 
 		$product->tags = [];

@@ -7,7 +7,7 @@ use App\Model\Doc\Shipping;
 use Doctrine\ORM\EntityManager;
 use Nette\Application\UI\Form;
 use Nette\Utils\Image;
-use Nimleaf\String;
+use Nimleaf\Strings;
 
 trait TShippingCreateFormFactory {
 
@@ -20,7 +20,7 @@ trait TShippingCreateFormFactory {
 		$shipping->description = $values->description;
 		$shipping->deliveryTime = $values->deliveryTime;
 		$shipping->price = $values->price;
-		$shipping->trackingCodeUrl = String::emptyToNull($values->trackingCodeUrl);
+		$shipping->trackingCodeUrl = Strings::emptyToNull($values->trackingCodeUrl);
 		
 		$shipping->resetPaymentOption();
 
