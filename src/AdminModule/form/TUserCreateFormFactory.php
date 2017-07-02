@@ -2,6 +2,7 @@
 
 namespace Nimleaf\Shopleaf\AdminModule\Form;
 
+use App\Model\Doc\Address;
 use App\Model\Doc\User;
 use Nette\Application\UI\Form;
 
@@ -22,11 +23,20 @@ trait TUserCreateFormFactory {
 		$user->address->town = $values->town;
 		$user->address->zip = $values->zip;
 		$user->contact->phone = $values->phone;
+		if ($this->createFormValidator()) {
+			$user->source = User::$SOURCE['added-by-admin'];
+		}
+		
 		$user->save($this->em);
 	}
 
 	public function create() {
 		$role = User::$ROLE;
+		if ($this->editFormValidator()) {
+			$userSource = $this->user->source;
+		} else {
+			$userSource = '';
+		}
 
 		$form = parent::createForm();
 
@@ -50,6 +60,9 @@ trait TUserCreateFormFactory {
 				->addRule(Form::EQUAL, _("Hesla se neshodují."), $form['password']);
 		$form->addSelect('role', _("role"), $role)
 				->setAttribute('class', "form-control");
+		$form->addText('source', _("zdroj registrace"))
+				->setDisabled()
+				->setValue($userSource);
 
 		$form->addGroup();
 		$form->addText('street', _("ulice"));
